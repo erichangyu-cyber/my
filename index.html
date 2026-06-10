@@ -6,23 +6,35 @@
     <title>全班成绩总览</title>
     <style>
 :root {
-  --bg: #f6f8fb;
+  --bg: #f7f9ff;
   --surface: #ffffff;
-  --surface-soft: #f9fbfd;
-  --text: #172033;
-  --muted: #687386;
-  --line: #e6ebf2;
-  --blue: #2563eb;
-  --blue-soft: #eaf1ff;
-  --red: #d93025;
-  --red-soft: #fff0ee;
-  --green: #168a46;
-  --green-soft: #ecf9f1;
-  --amber: #a16207;
-  --shadow: 0 18px 45px rgba(28, 45, 75, 0.08);
+  --surface-soft: #f7f9fc;
+  --surface-tint: #f0f6ff;
+  --text: #111827;
+  --muted: #667085;
+  --line: #e3e8f0;
+  --line-strong: #d7dee9;
+  --blue: #3772ff;
+  --blue-deep: #1d4ed8;
+  --blue-soft: #eaf2ff;
+  --teal: #00b8a9;
+  --teal-soft: #ddfbf7;
+  --pink: #ff4fa3;
+  --pink-soft: #ffe8f3;
+  --yellow: #ffd166;
+  --yellow-soft: #fff6dc;
+  --violet: #8b5cf6;
+  --violet-soft: #f0eaff;
+  --red: #ef4444;
+  --red-soft: #ffecee;
+  --green: #12a150;
+  --green-soft: #e9fbef;
+  --amber: #d97706;
+  --shadow: 0 18px 50px rgba(25, 36, 64, 0.08);
+  --shadow-soft: 0 8px 24px rgba(25, 36, 64, 0.06);
   --radius: 8px;
   color-scheme: light;
-  font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+  font-family: Inter, "SF Pro Display", "SF Pro Text", "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
 }
 
 * {
@@ -31,8 +43,16 @@
 
 body {
   margin: 0;
-  background: var(--bg);
+  background:
+    radial-gradient(circle at 8% 10%, rgba(255, 79, 163, 0.18) 0 18rem, transparent 18.5rem),
+    radial-gradient(circle at 92% 12%, rgba(0, 184, 169, 0.16) 0 19rem, transparent 19.5rem),
+    radial-gradient(circle at 82% 78%, rgba(139, 92, 246, 0.11) 0 24rem, transparent 24.5rem),
+    linear-gradient(180deg, #fff9fd 0, var(--bg) 330px, #f8fbff 100%);
   color: var(--text);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 button,
@@ -47,15 +67,16 @@ button {
 
 .app-shell {
   min-height: 100vh;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0));
 }
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 10;
-  border-bottom: 1px solid rgba(230, 235, 242, 0.82);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(214, 224, 238, 0.72);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(18px) saturate(1.16);
 }
 
 .topbar-inner {
@@ -71,32 +92,34 @@ button {
 .brand {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 12px;
   min-width: 0;
 }
 
 .brand-mark {
   display: grid;
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   place-items: center;
   border-radius: 8px;
-  background: var(--blue);
+  background: linear-gradient(135deg, var(--blue), var(--pink) 55%, var(--yellow));
+  box-shadow: 0 10px 22px rgba(255, 79, 163, 0.22);
   color: #fff;
-  font-weight: 800;
+  font-weight: 900;
   letter-spacing: 0;
 }
 
 .brand h1 {
   margin: 0;
-  font-size: 18px;
+  font-size: 19px;
   line-height: 1.2;
+  font-weight: 850;
 }
 
 .brand p {
   margin: 3px 0 0;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 12.5px;
 }
 
 .nav-actions {
@@ -110,13 +133,14 @@ button {
 .search,
 .sort-select {
   width: 220px;
-  height: 38px;
-  border: 1px solid var(--line);
+  height: 40px;
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: var(--surface-soft);
+  background: rgba(255, 255, 255, 0.94);
   color: var(--text);
   outline: none;
   padding: 0 12px;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
 }
 
 .sort-select {
@@ -128,16 +152,27 @@ button {
 .search:focus,
 .sort-select:focus {
   border-color: rgba(37, 99, 235, 0.42);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.11);
 }
 
 .ghost-button {
-  height: 38px;
-  border: 1px solid var(--line);
+  height: 40px;
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.94);
   color: var(--text);
-  padding: 0 13px;
+  padding: 0 14px;
+  font-weight: 700;
+  box-shadow: 0 1px 0 rgba(17, 24, 39, 0.03);
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+}
+
+.ghost-button:hover {
+  border-color: rgba(37, 99, 235, 0.34);
+  box-shadow: var(--shadow-soft);
+  color: var(--blue-deep);
+  transform: translateY(-1px);
 }
 
 .file-input {
@@ -147,7 +182,7 @@ button {
 .page {
   width: min(1180px, calc(100% - 36px));
   margin: 0 auto;
-  padding: 28px 0 44px;
+  padding: 30px 0 48px;
 }
 
 .hero {
@@ -161,29 +196,43 @@ button {
 .summary-panel,
 .detail-panel,
 .table-panel {
-  border: 1px solid var(--line);
+  border: 1px solid rgba(227, 232, 240, 0.72);
   border-radius: var(--radius);
-  background: var(--surface);
+  background: rgba(255, 255, 255, 0.96);
   box-shadow: var(--shadow);
 }
 
 .summary-panel {
+  position: relative;
+  overflow: hidden;
   padding: 26px;
+}
+
+.summary-panel::before,
+.detail-panel::before,
+.table-panel::before {
+  content: "";
+  display: block;
+  height: 3px;
+  margin: -1px -1px 0;
+  background: linear-gradient(90deg, var(--blue), var(--pink), var(--yellow), var(--teal));
 }
 
 .summary-panel h2,
 .detail-title h2 {
   margin: 0;
-  font-size: 28px;
+  font-size: 30px;
   line-height: 1.16;
   letter-spacing: 0;
+  font-weight: 880;
 }
 
 .summary-panel p {
   max-width: 740px;
   margin: 10px 0 0;
   color: var(--muted);
-  line-height: 1.7;
+  line-height: 1.75;
+  font-size: 14.5px;
 }
 
 .metric-grid {
@@ -196,21 +245,44 @@ button {
 .metric {
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--surface-soft);
-  padding: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.76)),
+    linear-gradient(135deg, var(--blue-soft), var(--pink-soft));
+  padding: 15px;
+  box-shadow: 0 1px 0 rgba(17, 24, 39, 0.03);
+}
+
+.metric:nth-child(2) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.75)),
+    linear-gradient(135deg, var(--yellow-soft), var(--pink-soft));
+}
+
+.metric:nth-child(3) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.75)),
+    linear-gradient(135deg, var(--teal-soft), var(--blue-soft));
+}
+
+.metric:nth-child(4) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.75)),
+    linear-gradient(135deg, var(--violet-soft), var(--yellow-soft));
 }
 
 .metric span {
   display: block;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 12.5px;
+  font-weight: 650;
 }
 
 .metric strong {
   display: block;
   margin-top: 7px;
-  font-size: 24px;
+  font-size: 26px;
   line-height: 1.15;
+  font-weight: 900;
 }
 
 .rank-panel {
@@ -220,7 +292,8 @@ button {
 .rank-panel h3,
 .section-title h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 17px;
+  font-weight: 850;
 }
 
 .rank-list {
@@ -235,8 +308,15 @@ button {
   gap: 10px;
   align-items: center;
   border-radius: 8px;
-  background: var(--surface-soft);
-  padding: 10px;
+  border: 1px solid rgba(227, 232, 240, 0.86);
+  background: #fff;
+  padding: 10px 11px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+
+.rank-item:hover {
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-1px);
 }
 
 .rank-num {
@@ -245,9 +325,9 @@ button {
   height: 28px;
   place-items: center;
   border-radius: 8px;
-  background: var(--blue-soft);
+  background: var(--surface-tint);
   color: var(--blue);
-  font-weight: 800;
+  font-weight: 900;
 }
 
 .rank-name {
@@ -268,45 +348,162 @@ button {
   align-items: end;
   justify-content: space-between;
   gap: 12px;
-  margin: 24px 0 12px;
+  margin: 26px 0 13px;
 }
 
 .section-title p {
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
+  font-size: 13.5px;
 }
 
 .table-panel {
+  position: relative;
   overflow: hidden;
+}
+
+.scroll-hint {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 8;
+  border: 1px solid rgba(215, 222, 233, 0.82);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow-soft);
+  color: var(--muted);
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 750;
+  pointer-events: none;
 }
 
 .table-scroll {
   overflow: auto;
+  position: relative;
+  max-width: 100%;
+  overscroll-behavior-x: contain;
+  padding-top: 0;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
+  width: max-content;
+  border-collapse: separate;
+  border-spacing: 0;
   min-width: 1120px;
+  table-layout: fixed;
 }
 
 th,
 td {
   border-bottom: 1px solid var(--line);
-  padding: 12px 11px;
+  padding: 13px 12px;
   text-align: right;
   white-space: nowrap;
-  font-size: 13px;
+  font-size: 13.5px;
 }
 
 th {
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #fbfcfe;
-  color: #566174;
-  font-weight: 700;
+  background: #f8fbff;
+  color: #536074;
+  font-weight: 780;
+  vertical-align: top;
+}
+
+th:nth-child(-n + 5),
+td:nth-child(-n + 5) {
+  position: sticky;
+  z-index: 2;
+  background: #fff;
+}
+
+th:nth-child(-n + 5) {
+  z-index: 5;
+  background: #f8fbff;
+}
+
+th:nth-child(1),
+td:nth-child(1) {
+  left: 0;
+  width: 52px;
+  min-width: 52px;
+  max-width: 52px;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  left: 52px;
+  width: 64px;
+  min-width: 64px;
+  max-width: 64px;
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  left: 116px;
+  width: 112px;
+  min-width: 112px;
+  max-width: 112px;
+}
+
+th:nth-child(4),
+td:nth-child(4) {
+  left: 228px;
+  width: 78px;
+  min-width: 78px;
+  max-width: 78px;
+}
+
+th:nth-child(5),
+td:nth-child(5) {
+  left: 306px;
+  width: 78px;
+  min-width: 78px;
+  max-width: 78px;
+  box-shadow: 12px 0 18px -18px rgba(25, 36, 64, 0.46);
+}
+
+tbody tr:hover td:nth-child(-n + 5) {
+  background: #f9fcff;
+}
+
+.exam-head {
+  width: 126px;
+  min-width: 126px;
+  max-width: 126px;
+}
+
+th:nth-child(n + 6),
+td:nth-child(n + 6) {
+  width: 126px;
+  min-width: 126px;
+  max-width: 126px;
+}
+
+.exam-name,
+.median-badge {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.exam-name {
+  color: #253044;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.median-badge {
+  width: max-content;
+  margin: 7px 0 0 auto;
+  border-radius: 999px;
+  background: var(--yellow-soft);
+  color: #9a5b00;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 850;
 }
 
 th:first-child,
@@ -319,19 +516,27 @@ td:nth-child(3) {
 }
 
 tbody tr {
-  transition: background 0.16s ease;
+  background: #fff;
+  transition: background 0.16s ease, box-shadow 0.16s ease;
 }
 
 tbody tr:hover {
-  background: #fbfdff;
+  background: #f9fcff;
+  box-shadow: inset 3px 0 0 rgba(37, 99, 235, 0.54);
 }
 
 .student-link {
   border: 0;
   background: transparent;
   color: var(--blue);
-  font-weight: 800;
+  font-weight: 850;
   padding: 0;
+  text-decoration: none;
+  transition: color 0.16s ease;
+}
+
+.student-link:hover {
+  color: var(--teal);
 }
 
 .pill {
@@ -339,8 +544,9 @@ tbody tr:hover {
   min-width: 46px;
   justify-content: center;
   border-radius: 999px;
-  padding: 5px 9px;
-  font-weight: 800;
+  padding: 4px 9px;
+  font-size: 12.5px;
+  font-weight: 850;
 }
 
 .diff-positive {
@@ -363,8 +569,8 @@ tbody tr:hover {
   min-width: 34px;
   justify-content: center;
   border-radius: 8px;
-  background: var(--blue-soft);
-  color: var(--blue);
+  background: linear-gradient(180deg, var(--blue-soft), #dceaff);
+  color: var(--blue-deep);
   padding: 6px 8px;
   font-weight: 900;
 }
@@ -378,37 +584,156 @@ tbody tr:hover {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+}
+
+.detail-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.detail-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) minmax(180px, 1.2fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.detail-kpis div {
+  border: 1px solid rgba(227, 232, 240, 0.72);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.76)),
+    linear-gradient(135deg, var(--blue-soft), var(--teal-soft));
+  padding: 13px 14px;
+  box-shadow: var(--shadow-soft);
+}
+
+.detail-kpis div:nth-child(2) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.76)),
+    linear-gradient(135deg, var(--pink-soft), var(--yellow-soft));
+}
+
+.detail-kpis div:nth-child(3) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.76)),
+    linear-gradient(135deg, var(--violet-soft), var(--blue-soft));
+}
+
+.detail-kpis div:nth-child(4) {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.76)),
+    linear-gradient(135deg, var(--teal-soft), var(--yellow-soft));
+}
+
+.detail-kpis span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.detail-kpis strong {
+  display: block;
+  margin-top: 6px;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .detail-title p {
   margin: 8px 0 0;
   color: var(--muted);
+  font-size: 14.5px;
 }
 
 .back-button {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  height: 38px;
-  border: 1px solid var(--line);
+  height: 40px;
+  border: 1px solid var(--line-strong);
   border-radius: 8px;
-  background: #fff;
+  background: rgba(255, 255, 255, 0.94);
   color: var(--text);
   padding: 0 13px;
+  font-weight: 750;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease, color 0.16s ease;
+}
+
+.back-button:hover {
+  border-color: rgba(37, 99, 235, 0.34);
+  box-shadow: var(--shadow-soft);
+  color: var(--blue-deep);
+}
+
+.share-button {
+  border-color: rgba(55, 114, 255, 0.28);
+  background: linear-gradient(135deg, var(--blue), var(--pink));
+  color: #fff;
+  box-shadow: 0 12px 22px rgba(55, 114, 255, 0.18);
+}
+
+.share-button:hover {
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 15px 28px rgba(255, 79, 163, 0.22);
+}
+
+.share-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
+}
+
+.toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 20;
+  max-width: min(360px, calc(100% - 48px));
+  border: 1px solid rgba(215, 222, 233, 0.88);
+  border-radius: 8px;
+  background: rgba(17, 24, 39, 0.92);
+  box-shadow: 0 18px 40px rgba(25, 36, 64, 0.18);
+  color: #fff;
+  opacity: 0;
+  padding: 12px 14px;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.toast.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .detail-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 330px;
+  grid-template-columns: minmax(0, 1.18fr) minmax(310px, 0.82fr);
   gap: 18px;
 }
 
+.chart-panel {
+  display: flex;
+  flex-direction: column;
+}
+
 .detail-panel {
+  overflow: hidden;
   padding: 20px;
 }
 
 .chart-wrap {
+  position: relative;
   width: 100%;
   height: 340px;
 }
@@ -416,24 +741,26 @@ tbody tr:hover {
 .chart {
   width: 100%;
   height: 100%;
+  filter: drop-shadow(0 10px 18px rgba(25, 36, 64, 0.03));
 }
 
 .axis-label {
-  fill: #687386;
+  fill: #697586;
   font-size: 12px;
+  font-weight: 650;
 }
 
 .chart-line {
   fill: none;
   stroke: var(--blue);
-  stroke-width: 3;
+  stroke-width: 3.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .median-line {
   fill: none;
-  stroke: #9aa5b5;
+  stroke: #93a1b5;
   stroke-width: 2;
   stroke-dasharray: 5 5;
 }
@@ -441,27 +768,83 @@ tbody tr:hover {
 .chart-dot {
   fill: #fff;
   stroke: var(--blue);
-  stroke-width: 3;
+  stroke-width: 3.2;
+}
+
+.chart-hit {
+  fill: transparent;
+  cursor: crosshair;
+  pointer-events: all;
+}
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 2;
+  min-width: 138px;
+  border: 1px solid rgba(215, 222, 233, 0.92);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 16px 34px rgba(25, 36, 64, 0.16);
+  color: var(--text);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+}
+
+.chart-tooltip.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chart-tooltip strong,
+.chart-tooltip span {
+  display: block;
+  padding: 0 12px;
+}
+
+.chart-tooltip strong {
+  padding-top: 10px;
+  font-size: 13px;
+}
+
+.chart-tooltip span {
+  padding-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.chart-tooltip span:last-child {
+  padding-bottom: 10px;
 }
 
 .score-list {
   display: grid;
   gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .score-card {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr;
   gap: 8px;
-  align-items: center;
+  align-items: start;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--surface-soft);
+  background: linear-gradient(180deg, #fff, var(--surface-soft));
   padding: 12px;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.score-card:hover {
+  border-color: rgba(37, 99, 235, 0.22);
+  box-shadow: var(--shadow-soft);
 }
 
 .score-card strong {
   font-size: 15px;
+  font-weight: 850;
 }
 
 .score-card small {
@@ -471,6 +854,14 @@ tbody tr:hover {
 .score-value {
   font-size: 22px;
   font-weight: 900;
+  letter-spacing: 0;
+}
+
+.score-card > div:last-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .legend {
@@ -479,7 +870,7 @@ tbody tr:hover {
   gap: 12px;
   margin-top: 12px;
   color: var(--muted);
-  font-size: 12px;
+  font-size: 12.5px;
 }
 
 .legend span {
@@ -502,7 +893,7 @@ tbody tr:hover {
 .empty-state {
   border: 1px dashed var(--line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--surface-soft);
   padding: 34px;
   text-align: center;
   color: var(--muted);
@@ -522,6 +913,11 @@ tbody tr:hover {
   gap: 8px;
   color: var(--muted);
   font-size: 13px;
+}
+
+.sort-select {
+  color: var(--text);
+  font-weight: 700;
 }
 
 @media (max-width: 860px) {
@@ -559,8 +955,24 @@ tbody tr:hover {
     font-size: 24px;
   }
 
+  .summary-panel {
+    padding: 22px;
+  }
+
   .metric-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .metric strong {
+    font-size: 23px;
+  }
+
+  .detail-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .detail-kpis .wide {
+    grid-column: 1 / -1;
   }
 
   .section-title,
@@ -569,8 +981,24 @@ tbody tr:hover {
     flex-direction: column;
   }
 
+  .detail-actions {
+    justify-content: flex-start;
+  }
+
   .table-tools {
     justify-content: flex-start;
+  }
+
+  .detail-panel {
+    padding: 16px;
+  }
+
+  .score-list {
+    grid-template-columns: 1fr;
+  }
+
+  .exam-head {
+    min-width: 112px;
   }
 
   th {
@@ -598,7 +1026,7 @@ tbody tr:hover {
   }
 }
 
-    </style>
+</style>
   </head>
   <body>
     <div id="app"></div>
@@ -810,6 +1238,7 @@ function renderShell(content, options = {}) {
         </div>
       </header>
       <main class="page">${content}</main>
+      <div class="toast" role="status" aria-live="polite"></div>
     </div>
   `;
   const search = app.querySelector(".search");
@@ -924,8 +1353,9 @@ function overview(options = {}) {
       </div>
     </section>
     <section class="table-panel">
+      <div class="scroll-hint">左右滑动查看全部考试成绩</div>
       <div class="table-scroll">
-        <table>
+        <table style="min-width: ${384 + tests.length * 126}px">
           <thead>
             <tr>
               <th>序号</th>
@@ -933,7 +1363,7 @@ function overview(options = {}) {
               <th>姓名</th>
               <th>总积分</th>
               <th>均分</th>
-              ${tests.map((test, index) => `<th>${escapeHtml(test)}<br><span class="muted">中位数 ${compactNumber(medians[index])}</span></th>`).join("")}
+              ${tests.map((test, index) => `<th class="exam-head"><span class="exam-name">${escapeHtml(test)}</span><span class="median-badge">中位数 ${compactNumber(medians[index])}</span></th>`).join("")}
             </tr>
           </thead>
           <tbody>${rows || `<tr><td colspan="${tests.length + 5}"><div class="empty-state">没有匹配的学生</div></td></tr>`}</tbody>
@@ -959,6 +1389,26 @@ function sortStudentsForRank(students) {
   return [...students].sort((a, b) => b.totalPoints - a.totalPoints || b.average - a.average || a.id - b.id);
 }
 
+function getTopQuartilePerformance(student, students) {
+  const result = { count: 0, tests: [] };
+  tests.forEach((test, index) => {
+    const score = student.scores[index];
+    if (typeof score !== "number" || !Number.isFinite(score)) return;
+    const sortedScores = students
+      .map((item) => item.scores[index])
+      .filter((itemScore) => typeof itemScore === "number" && Number.isFinite(itemScore))
+      .sort((a, b) => b - a);
+    if (!sortedScores.length) return;
+    const cutoffIndex = Math.max(0, Math.ceil(sortedScores.length * 0.25) - 1);
+    const cutoff = sortedScores[cutoffIndex];
+    if (score >= cutoff) {
+      result.count += 1;
+      result.tests.push(test);
+    }
+  });
+  return result;
+}
+
 function bindStudentButtons() {
   app.querySelectorAll("[data-student]").forEach((button) => {
     button.addEventListener("click", () => setStudent(button.dataset.student));
@@ -972,19 +1422,39 @@ function renderStudent(name, options = {}) {
     overview();
     return;
   }
+  const validScores = student.scores
+    .map((score, index) => ({ score, test: tests[index] }))
+    .filter((item) => typeof item.score === "number");
+  const bestScore = validScores.reduce((best, item) => (item.score > best.score ? item : best), validScores[0] || { score: null, test: "-" });
+  const positiveDiffs = student.diffs.filter((diff) => typeof diff === "number" && diff > 0).length;
+  const topQuartilePerformance = getTopQuartilePerformance(student, students);
 
   renderShell(`
     <section class="detail-header">
       <div class="detail-title">
         <h2>${student.id}号 ${escapeHtml(student.name)}的成绩趋势</h2>
-        <p>总积分 ${student.totalPoints} 分，平均分 ${compactNumber(student.average)}；折线展示个人成绩，虚线展示每次班级中位数。</p>
+        <p>总积分 ${student.totalPoints} 分，平均分 ${compactNumber(student.average)}；最佳表现次数按每次考试进入班级前25%统计。</p>
       </div>
-      <button class="back-button" type="button" data-action="back">← 返回总览</button>
+      <div class="detail-actions">
+        <button class="back-button share-button" type="button" data-action="share">生成分享图</button>
+        <button class="back-button" type="button" data-action="back">← 返回总览</button>
+      </div>
+    </section>
+
+    <section class="detail-kpis">
+      <div><span>总积分</span><strong>${student.totalPoints}</strong></div>
+      <div><span>总均分</span><strong>${compactNumber(student.average)}</strong></div>
+      <div><span>最高分</span><strong>${compactNumber(bestScore.score)}</strong></div>
+      <div><span>高于中位数</span><strong>${positiveDiffs}/${tests.length}</strong></div>
+      <div class="wide"><span>最佳表现次数（单次前25%）</span><strong>${topQuartilePerformance.count}/${validScores.length}</strong></div>
     </section>
 
     <section class="detail-layout">
-      <div class="detail-panel">
-        <div class="chart-wrap">${trendChart(student, medians)}</div>
+      <div class="detail-panel chart-panel">
+        <div class="chart-wrap">
+          ${trendChart(student, medians)}
+          <div class="chart-tooltip" aria-hidden="true"></div>
+        </div>
         <div class="legend">
           <span><i></i>个人成绩</span>
           <span class="median"><i></i>班级中位数</span>
@@ -1015,6 +1485,8 @@ function renderStudent(name, options = {}) {
   `, options);
 
   app.querySelector('[data-action="back"]').addEventListener("click", () => setStudent(null));
+  app.querySelector('[data-action="share"]').addEventListener("click", () => shareStudentImage(student.name));
+  bindChartTooltip();
 }
 
 function trendChart(student, medians) {
@@ -1045,7 +1517,26 @@ function trendChart(student, medians) {
   const dots = student.scores
     .map((score, index) => {
       if (typeof score !== "number") return "";
-      return `<circle class="chart-dot" cx="${x(index)}" cy="${y(score)}" r="5"><title>${escapeHtml(tests[index])}：${compactNumber(score)}</title></circle>`;
+      return `<circle class="chart-dot" cx="${x(index)}" cy="${y(score)}" r="5"><title>${escapeHtml(tests[index])}：成绩 ${compactNumber(score)}，中位数 ${compactNumber(medians[index])}</title></circle>`;
+    })
+    .join("");
+
+  const hitAreas = student.scores
+    .map((score, index) => {
+      const left = index === 0 ? pad.left : (x(index - 1) + x(index)) / 2;
+      const right = index === tests.length - 1 ? width - pad.right : (x(index) + x(index + 1)) / 2;
+      const diff = typeof score === "number" && typeof medians[index] === "number" ? score - medians[index] : null;
+      return `
+        <rect class="chart-hit"
+          x="${left.toFixed(1)}"
+          y="${pad.top}"
+          width="${(right - left).toFixed(1)}"
+          height="${height - pad.top - pad.bottom}"
+          data-test="${escapeHtml(tests[index])}"
+          data-score="${compactNumber(score)}"
+          data-median="${compactNumber(medians[index])}"
+          data-diff="${formatDiff(diff)}" />
+      `;
     })
     .join("");
 
@@ -1060,21 +1551,366 @@ function trendChart(student, medians) {
       <path class="median-line" d="${lineFor(medians)}" />
       <path class="chart-line" d="${lineFor(student.scores)}" />
       ${dots}
+      ${hitAreas}
       ${labels}
     </svg>
   `;
 }
 
+function bindChartTooltip() {
+  const wrap = app.querySelector(".chart-wrap");
+  const tooltip = app.querySelector(".chart-tooltip");
+  if (!wrap || !tooltip) return;
+
+  wrap.querySelectorAll(".chart-hit").forEach((area) => {
+    const show = (event) => {
+      const rect = wrap.getBoundingClientRect();
+      tooltip.innerHTML = `
+        <strong>${escapeHtml(area.dataset.test)}</strong>
+        <span>成绩 ${escapeHtml(area.dataset.score)}</span>
+        <span>中位数 ${escapeHtml(area.dataset.median)}</span>
+        <span>差值 ${escapeHtml(area.dataset.diff)}</span>
+      `;
+      tooltip.style.left = `${Math.min(Math.max(event.clientX - rect.left + 12, 8), rect.width - tooltip.offsetWidth - 8)}px`;
+      tooltip.style.top = `${Math.min(Math.max(event.clientY - rect.top - 16, 8), rect.height - tooltip.offsetHeight - 8)}px`;
+      tooltip.classList.add("is-visible");
+    };
+    area.addEventListener("mousemove", show);
+    area.addEventListener("mouseenter", show);
+    area.addEventListener("click", show);
+    area.addEventListener("touchstart", (event) => {
+      show(event.touches[0]);
+    });
+    area.addEventListener("mouseleave", () => tooltip.classList.remove("is-visible"));
+  });
+}
+
+async function shareStudentImage(studentName) {
+  const { medians, students } = getStats();
+  const student = students.find((item) => item.name === studentName);
+  if (!student) return;
+  const shareButton = app.querySelector('[data-action="share"]');
+  if (shareButton) shareButton.disabled = true;
+  showToast("正在生成分享图片...");
+  try {
+    const blob = await createStudentShareBlob(student, medians, students);
+    if (navigator.clipboard && window.ClipboardItem) {
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+      showToast("分享图片已复制，可以直接粘贴发送。");
+    } else {
+      downloadBlob(blob, `${student.name}成绩分享.png`);
+      showToast("当前浏览器不支持自动复制图片，已为你下载分享图。");
+    }
+  } catch (error) {
+    try {
+      const blob = await createStudentShareBlob(student, medians, students);
+      downloadBlob(blob, `${student.name}成绩分享.png`);
+      showToast("浏览器限制了自动复制，已改为下载分享图。");
+    } catch (downloadError) {
+      showToast("生成分享图失败，请换用 Chrome 或 Edge 再试。");
+    }
+  } finally {
+    if (shareButton) shareButton.disabled = false;
+  }
+}
+
+function showToast(message) {
+  const toast = app.querySelector(".toast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add("is-visible");
+  window.clearTimeout(showToast.timer);
+  showToast.timer = window.setTimeout(() => {
+    toast.classList.remove("is-visible");
+  }, 2600);
+}
+
+function createStudentShareBlob(student, medians, students) {
+  const validScores = student.scores
+    .map((score, index) => ({ score, test: tests[index], diff: student.diffs[index], median: medians[index] }))
+    .filter((item) => typeof item.score === "number" && Number.isFinite(item.score));
+  const bestScore = validScores.reduce((best, item) => (item.score > best.score ? item : best), validScores[0] || { score: null, test: "-" });
+  const positiveDiffs = student.diffs.filter((diff) => typeof diff === "number" && diff > 0).length;
+  const topQuartilePerformance = getTopQuartilePerformance(student, students);
+  const width = 1080;
+  const scoreRows = Math.ceil(validScores.length / 2);
+  const height = Math.max(1340, 1040 + scoreRows * 104);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  drawShareBackground(ctx, width, height);
+  drawShareHeader(ctx, student, width);
+  drawShareMetrics(ctx, [
+    ["总积分", student.totalPoints],
+    ["总均分", compactNumber(student.average)],
+    ["最高分", compactNumber(bestScore.score)],
+    ["高于中位数", `${positiveDiffs}/${validScores.length}`],
+    ["最佳表现", `${topQuartilePerformance.count}/${validScores.length}`],
+  ]);
+  drawShareChart(ctx, student, medians, 70, 390, 940, 360);
+  drawShareScores(ctx, validScores, 70, 825, 940);
+  drawShareFooter(ctx, width, height);
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob);
+      else reject(new Error("Canvas export failed"));
+    }, "image/png");
+  });
+}
+
+function drawShareBackground(ctx, width, height) {
+  const bg = ctx.createLinearGradient(0, 0, width, height);
+  bg.addColorStop(0, "#fff8fc");
+  bg.addColorStop(0.45, "#f7fbff");
+  bg.addColorStop(1, "#f3fff9");
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, width, height);
+  drawCircle(ctx, 90, 80, 250, "rgba(255, 79, 163, 0.20)");
+  drawCircle(ctx, 980, 115, 260, "rgba(0, 184, 169, 0.16)");
+  drawCircle(ctx, 910, height - 150, 300, "rgba(139, 92, 246, 0.12)");
+  roundRect(ctx, 40, 40, width - 80, height - 80, 28);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.82)";
+  ctx.fill();
+  ctx.strokeStyle = "rgba(215, 222, 233, 0.9)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function drawShareHeader(ctx, student, width) {
+  const accent = ctx.createLinearGradient(64, 64, width - 64, 64);
+  accent.addColorStop(0, "#3772ff");
+  accent.addColorStop(0.45, "#ff4fa3");
+  accent.addColorStop(0.72, "#ffd166");
+  accent.addColorStop(1, "#00b8a9");
+  roundRect(ctx, 64, 64, width - 128, 8, 4);
+  ctx.fillStyle = accent;
+  ctx.fill();
+
+  ctx.fillStyle = "#111827";
+  ctx.font = font(900, 58);
+  ctx.fillText(`${student.id}号 ${student.name}`, 76, 160);
+  ctx.fillStyle = "#667085";
+  ctx.font = font(650, 25);
+  ctx.fillText("个人成绩趋势分享卡", 78, 210);
+  ctx.textAlign = "right";
+  ctx.fillStyle = "#3772ff";
+  ctx.font = font(850, 24);
+  ctx.fillText("全班成绩总览", width - 78, 160);
+  ctx.fillStyle = "#667085";
+  ctx.font = font(600, 20);
+  ctx.fillText("长按或粘贴即可发送", width - 78, 200);
+  ctx.textAlign = "left";
+}
+
+function drawShareMetrics(ctx, metrics) {
+  const x = 70;
+  const y = 255;
+  const gap = 14;
+  const cardWidth = (940 - gap * 4) / 5;
+  metrics.forEach(([label, value], index) => {
+    const left = x + index * (cardWidth + gap);
+    const fills = ["#eaf2ff", "#ffe8f3", "#f0eaff", "#ddfbf7", "#fff6dc"];
+    roundRect(ctx, left, y, cardWidth, 104, 18);
+    ctx.fillStyle = fills[index % fills.length];
+    ctx.fill();
+    ctx.strokeStyle = "rgba(215, 222, 233, 0.85)";
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    ctx.fillStyle = "#667085";
+    ctx.font = font(700, 20);
+    ctx.fillText(label, left + 18, y + 34);
+    ctx.fillStyle = "#111827";
+    ctx.font = font(900, 34);
+    ctx.fillText(String(value), left + 18, y + 78);
+  });
+}
+
+function drawShareChart(ctx, student, medians, left, top, width, height) {
+  roundRect(ctx, left, top, width, height, 22);
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+  ctx.strokeStyle = "#e3e8f0";
+  ctx.stroke();
+
+  const pad = { left: 54, right: 28, top: 42, bottom: 74 };
+  const values = [...student.scores, ...medians].filter((value) => typeof value === "number" && Number.isFinite(value));
+  const min = Math.max(60, Math.floor(Math.min(...values) / 5) * 5 - 5);
+  const max = 100;
+  const plotLeft = left + pad.left;
+  const plotRight = left + width - pad.right;
+  const plotTop = top + pad.top;
+  const plotBottom = top + height - pad.bottom;
+  const x = (index) => plotLeft + (index / (tests.length - 1 || 1)) * (plotRight - plotLeft);
+  const y = (value) => plotTop + ((max - value) / (max - min)) * (plotBottom - plotTop);
+
+  ctx.fillStyle = "#111827";
+  ctx.font = font(850, 28);
+  ctx.fillText("成绩趋势", left + 28, top + 36);
+  ctx.font = font(650, 18);
+  ctx.fillStyle = "#667085";
+  ctx.fillText("蓝线为个人成绩，灰线为班级中位数", left + 155, top + 35);
+
+  [60, 70, 80, 90, 100].filter((tick) => tick >= min).forEach((tick) => {
+    ctx.strokeStyle = "#edf1f6";
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(plotLeft, y(tick));
+    ctx.lineTo(plotRight, y(tick));
+    ctx.stroke();
+    ctx.fillStyle = "#697586";
+    ctx.font = font(650, 16);
+    ctx.fillText(String(tick), left + 18, y(tick) + 5);
+  });
+
+  drawLine(ctx, medians, x, y, "#93a1b5", 3, [10, 10]);
+  drawLine(ctx, student.scores, x, y, "#3772ff", 6);
+  student.scores.forEach((score, index) => {
+    if (typeof score !== "number") return;
+    ctx.beginPath();
+    ctx.arc(x(index), y(score), 7, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.strokeStyle = "#3772ff";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+  });
+
+  tests.forEach((test, index) => {
+    ctx.fillStyle = "#697586";
+    ctx.font = font(650, 16);
+    ctx.textAlign = "center";
+    ctx.fillText(truncateText(ctx, test, 82), x(index), top + height - 30);
+  });
+  ctx.textAlign = "left";
+}
+
+function drawShareScores(ctx, validScores, left, top, width) {
+  ctx.fillStyle = "#111827";
+  ctx.font = font(850, 28);
+  ctx.fillText("成绩明细", left, top - 22);
+  const gap = 14;
+  const cardWidth = (width - gap) / 2;
+  const cardHeight = 88;
+  validScores.forEach((item, index) => {
+    const col = index % 2;
+    const row = Math.floor(index / 2);
+    const x = left + col * (cardWidth + gap);
+    const y = top + row * (cardHeight + 14);
+    roundRect(ctx, x, y, cardWidth, cardHeight, 18);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+    ctx.strokeStyle = "#e3e8f0";
+    ctx.stroke();
+    ctx.fillStyle = "#111827";
+    ctx.font = font(850, 24);
+    ctx.fillText(truncateText(ctx, item.test, 210), x + 20, y + 34);
+    ctx.fillStyle = "#667085";
+    ctx.font = font(650, 18);
+    ctx.fillText(`中位数 ${compactNumber(item.median)}`, x + 20, y + 64);
+    ctx.textAlign = "right";
+    ctx.fillStyle = "#111827";
+    ctx.font = font(900, 30);
+    ctx.fillText(compactNumber(item.score), x + cardWidth - 22, y + 36);
+    ctx.fillStyle = item.diff > 0 ? "#ef4444" : item.diff < 0 ? "#12a150" : "#667085";
+    ctx.font = font(850, 20);
+    ctx.fillText(formatDiff(item.diff), x + cardWidth - 22, y + 66);
+    ctx.textAlign = "left";
+  });
+}
+
+function drawShareFooter(ctx, width, height) {
+  ctx.fillStyle = "#667085";
+  ctx.font = font(650, 20);
+  ctx.textAlign = "center";
+  ctx.fillText("数据来自全班成绩总览 · 红色为高于中位数，绿色为低于中位数", width / 2, height - 70);
+  ctx.textAlign = "left";
+}
+
+function drawLine(ctx, values, x, y, color, lineWidth, dash = []) {
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.lineWidth = lineWidth;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.setLineDash(dash);
+  ctx.beginPath();
+  let started = false;
+  values.forEach((value, index) => {
+    if (typeof value !== "number" || !Number.isFinite(value)) return;
+    if (!started) {
+      ctx.moveTo(x(index), y(value));
+      started = true;
+    } else {
+      ctx.lineTo(x(index), y(value));
+    }
+  });
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawCircle(ctx, x, y, radius, color) {
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fillStyle = color;
+  ctx.fill();
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + width, y, x + width, y + height, r);
+  ctx.arcTo(x + width, y + height, x, y + height, r);
+  ctx.arcTo(x, y + height, x, y, r);
+  ctx.arcTo(x, y, x + width, y, r);
+  ctx.closePath();
+}
+
+function truncateText(ctx, text, maxWidth) {
+  const value = String(text);
+  if (ctx.measureText(value).width <= maxWidth) return value;
+  let output = value;
+  while (output.length > 1 && ctx.measureText(`${output}...`).width > maxWidth) {
+    output = output.slice(0, -1);
+  }
+  return `${output}...`;
+}
+
+function font(weight, size) {
+  return `${weight} ${size}px Inter, "SF Pro Display", "HarmonyOS Sans SC", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif`;
+}
+
 function exportExcel() {
+  const { medians, students } = getStats();
   const rows = [
-    ["学号", "姓名", ...tests],
-    ...rawStudents
+    ["学号", "姓名", "总积分", "总均分", ...tests.flatMap((test) => [`${test}成绩`, `${test}差值`])],
+    ...students
       .slice()
       .sort((a, b) => a.id - b.id)
-      .map((student) => [student.id, student.name, ...student.scores.map((score) => (score === null ? "" : score))]),
+      .map((student) => [
+        student.id,
+        student.name,
+        student.totalPoints,
+        Number(student.average.toFixed(1)),
+        ...student.scores.flatMap((score, index) => [
+          score === null ? "" : score,
+          styledDiffCell(typeof score === "number" ? score - medians[index] : null),
+        ]),
+      ]),
   ];
   const blob = createXlsxBlob(rows);
   downloadBlob(blob, "成绩导出.xlsx");
+}
+
+function styledDiffCell(diff) {
+  if (diff === null) return "";
+  const value = formatDiff(diff);
+  if (diff > 0) return { value, style: 2 };
+  if (diff < 0) return { value, style: 3 };
+  return value;
 }
 
 function createXlsxBlob(rows) {
@@ -1127,19 +1963,25 @@ function workbookRelsXml() {
 function stylesXml() {
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
-  <fonts count="2">
+  <fonts count="4">
     <font><sz val="11"/><name val="Arial"/></font>
     <font><b/><sz val="11"/><name val="Arial"/></font>
+    <font><b/><sz val="11"/><color rgb="FFD93025"/><name val="Arial"/></font>
+    <font><b/><sz val="11"/><color rgb="FF168A46"/><name val="Arial"/></font>
   </fonts>
-  <fills count="2">
+  <fills count="4">
     <fill><patternFill patternType="none"/></fill>
     <fill><patternFill patternType="gray125"/></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FFFFF0EE"/><bgColor indexed="64"/></patternFill></fill>
+    <fill><patternFill patternType="solid"><fgColor rgb="FFECF9F1"/><bgColor indexed="64"/></patternFill></fill>
   </fills>
   <borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>
   <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
-  <cellXfs count="2">
+  <cellXfs count="4">
     <xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>
     <xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/>
+    <xf numFmtId="0" fontId="2" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1"/>
+    <xf numFmtId="0" fontId="3" fillId="3" borderId="0" xfId="0" applyFont="1" applyFill="1"/>
   </cellXfs>
   <cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>
 </styleSheet>`;
@@ -1165,11 +2007,13 @@ function sheetXml(rows) {
 
 function cellXml(cell, rowNumber, colIndex, isHeader) {
   const ref = `${columnName(colIndex + 1)}${rowNumber}`;
-  const style = isHeader ? ' s="1"' : "";
-  if (typeof cell === "number" && Number.isFinite(cell)) {
-    return `<c r="${ref}"${style}><v>${cell}</v></c>`;
+  const value = cell && typeof cell === "object" && "value" in cell ? cell.value : cell;
+  const styleId = isHeader ? 1 : cell && typeof cell === "object" ? cell.style : null;
+  const style = styleId ? ` s="${styleId}"` : "";
+  if (typeof value === "number" && Number.isFinite(value)) {
+    return `<c r="${ref}"${style}><v>${value}</v></c>`;
   }
-  const text = escapeXml(cell ?? "");
+  const text = escapeXml(value ?? "");
   return `<c r="${ref}" t="inlineStr"${style}><is><t>${text}</t></is></c>`;
 }
 
@@ -1438,8 +2282,8 @@ function normalizeImportedRows(rows) {
   const nameHeaderIndex = header.findIndex((cell) => /姓名/.test(String(cell)));
   const nameIndex = nameHeaderIndex >= 0 ? nameHeaderIndex : detectedNameIndex;
   const finalIdIndex = idIndex >= 0 ? idIndex : detectedIdIndex;
-  const scoreIndexes = detectScoreIndexes(body, finalIdIndex, nameIndex).map((index, order) => ({
-    cell: String(header[index] || defaultTests[order] || `第${order + 1}次`).trim(),
+  const scoreIndexes = detectScoreIndexes(body, finalIdIndex, nameIndex, header).map((index, order) => ({
+    cell: cleanTestName(String(header[index] || defaultTests[order] || `第${order + 1}次`).trim()),
     index,
   }));
   const nextTests = scoreIndexes.map(({ cell }, index) => cell || `第${index + 1}次`);
@@ -1481,11 +2325,17 @@ function detectIdIndex(rows, nameIndex) {
   return 0;
 }
 
-function detectScoreIndexes(rows, idIndex, nameIndex) {
+function cleanTestName(name) {
+  return name.replace(/成绩$/, "") || name;
+}
+
+function detectScoreIndexes(rows, idIndex, nameIndex, header = []) {
   const maxCols = Math.max(...rows.map((row) => row.length), 0);
   const indexes = [];
   for (let col = 0; col < maxCols; col += 1) {
     if (col === idIndex || col === nameIndex) continue;
+    const label = String(header[col] ?? "").trim();
+    if (/总积分|总均分|均分|平均分|差值|中位数/i.test(label)) continue;
     const values = rows.map((row) => parseNumber(row[col])).filter((value) => value !== null);
     if (values.length >= Math.max(2, Math.floor(rows.length * 0.45)) && values.every((value) => value >= 0 && value <= 150)) indexes.push(col);
   }
@@ -1504,6 +2354,6 @@ function render(options = {}) {
 window.addEventListener("hashchange", render);
 render();
 
-    </script>
+</script>
   </body>
 </html>
