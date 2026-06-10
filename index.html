@@ -33,6 +33,7 @@
   --shadow: 0 18px 50px rgba(25, 36, 64, 0.08);
   --shadow-soft: 0 8px 24px rgba(25, 36, 64, 0.06);
   --radius: 8px;
+  --table-head-top: 78px;
   color-scheme: light;
   font-family: Inter, "SF Pro Display", "SF Pro Text", "HarmonyOS Sans SC", "MiSans", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
 }
@@ -359,17 +360,29 @@ button {
 
 .table-panel {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .table-scroll {
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: visible;
   position: relative;
   max-width: 100%;
   overscroll-behavior-x: contain;
   padding-bottom: 10px;
   scrollbar-color: rgba(55, 114, 255, 0.52) rgba(234, 242, 255, 0.95);
   scrollbar-width: thin;
+}
+
+.table-head-scroll {
+  position: sticky;
+  top: var(--table-head-top);
+  z-index: 12;
+  overflow: hidden;
+  max-width: 100%;
+  border-bottom: 1px solid var(--line);
+  background: #f8fbff;
+  box-shadow: 0 12px 24px rgba(25, 36, 64, 0.08);
 }
 
 .table-scroll::-webkit-scrollbar {
@@ -406,49 +419,67 @@ td {
 
 th {
   position: sticky;
-  top: 0;
-  z-index: 1;
+  top: var(--table-head-top);
+  z-index: 7;
   background: #f8fbff;
   color: #536074;
   font-weight: 780;
   vertical-align: top;
 }
 
-th:nth-child(-n + 3),
-td:nth-child(-n + 3) {
+.head-table th {
+  top: auto;
+}
+
+.body-head th {
+  height: 0;
+  border-bottom: 0;
+  color: transparent;
+  font-size: 0;
+  line-height: 0;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+.body-head .exam-name,
+.body-head .median-badge {
+  display: none;
+}
+
+th:nth-child(-n + 2),
+td:nth-child(-n + 2) {
   position: sticky;
   z-index: 2;
   background: #fff;
 }
 
-th:nth-child(-n + 3) {
-  z-index: 5;
+th:nth-child(-n + 2) {
+  z-index: 9;
   background: #f8fbff;
 }
 
 th:nth-child(1),
 td:nth-child(1) {
   left: 0;
-  width: 44px;
-  min-width: 44px;
-  max-width: 44px;
-}
-
-th:nth-child(2),
-td:nth-child(2) {
-  left: 44px;
   width: 52px;
   min-width: 52px;
   max-width: 52px;
 }
 
-th:nth-child(3),
-td:nth-child(3) {
-  left: 96px;
+th:nth-child(2),
+td:nth-child(2) {
+  left: 52px;
   width: 100px;
   min-width: 100px;
   max-width: 100px;
   box-shadow: 12px 0 18px -18px rgba(25, 36, 64, 0.46);
+}
+
+th:nth-child(3),
+td:nth-child(3) {
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
 }
 
 th:nth-child(4),
@@ -458,14 +489,7 @@ td:nth-child(4) {
   max-width: 70px;
 }
 
-th:nth-child(5),
-td:nth-child(5) {
-  width: 70px;
-  min-width: 70px;
-  max-width: 70px;
-}
-
-tbody tr:hover td:nth-child(-n + 3) {
+tbody tr:hover td:nth-child(-n + 2) {
   background: #f9fcff;
 }
 
@@ -475,8 +499,8 @@ tbody tr:hover td:nth-child(-n + 3) {
   max-width: 116px;
 }
 
-th:nth-child(n + 6),
-td:nth-child(n + 6) {
+th:nth-child(n + 5),
+td:nth-child(n + 5) {
   width: 116px;
   min-width: 116px;
   max-width: 116px;
@@ -508,9 +532,7 @@ td:nth-child(n + 6) {
 th:first-child,
 td:first-child,
 th:nth-child(2),
-td:nth-child(2),
-th:nth-child(3),
-td:nth-child(3) {
+td:nth-child(2) {
   text-align: left;
 }
 
@@ -941,6 +963,10 @@ tbody tr:hover {
 }
 
 @media (max-width: 860px) {
+  :root {
+    --table-head-top: 140px;
+  }
+
   .topbar-inner,
   .page {
     width: min(100% - 24px, 1360px);
@@ -1017,9 +1043,6 @@ tbody tr:hover {
     min-width: 112px;
   }
 
-  th {
-    top: 0;
-  }
 }
 
 @media (max-width: 560px) {
@@ -1307,9 +1330,8 @@ function overview(options = {}) {
 
   const rows = filtered
     .map(
-      (student, index) => `
+      (student) => `
       <tr>
-        <td>${index + 1}</td>
         <td>${student.id}</td>
         <td><button class="student-link" type="button" data-student="${escapeHtml(student.name)}">${escapeHtml(student.name)}</button></td>
         <td><span class="points">${student.totalPoints}</span></td>
@@ -1328,6 +1350,18 @@ function overview(options = {}) {
     `,
     )
     .join("");
+  const tableMinWidth = 292 + tests.length * 116;
+  const tableHeader = `
+    <thead>
+      <tr>
+        <th>学号</th>
+        <th>姓名</th>
+        <th>总积分</th>
+        <th>均分</th>
+        ${tests.map((test, index) => `<th class="exam-head"><span class="exam-name">${escapeHtml(test)}</span><span class="median-badge">中位数 ${compactNumber(medians[index])}</span></th>`).join("")}
+      </tr>
+    </thead>
+  `;
 
   renderShell(`
     <section class="hero">
@@ -1377,19 +1411,15 @@ function overview(options = {}) {
       </div>
     </section>
     <section class="table-panel">
+      <div class="table-head-scroll">
+        <table class="score-table head-table" style="min-width: ${tableMinWidth}px">
+          ${tableHeader}
+        </table>
+      </div>
       <div class="table-scroll">
-        <table style="min-width: ${336 + tests.length * 116}px">
-          <thead>
-            <tr>
-              <th>序号</th>
-              <th>学号</th>
-              <th>姓名</th>
-              <th>总积分</th>
-              <th>均分</th>
-              ${tests.map((test, index) => `<th class="exam-head"><span class="exam-name">${escapeHtml(test)}</span><span class="median-badge">中位数 ${compactNumber(medians[index])}</span></th>`).join("")}
-            </tr>
-          </thead>
-          <tbody>${rows || `<tr><td colspan="${tests.length + 5}"><div class="empty-state">没有匹配的学生</div></td></tr>`}</tbody>
+        <table class="score-table body-table" style="min-width: ${tableMinWidth}px">
+          ${tableHeader.replace("<thead>", '<thead class="body-head">')}
+          <tbody>${rows || `<tr><td colspan="${tests.length + 4}"><div class="empty-state">没有匹配的学生</div></td></tr>`}</tbody>
         </table>
       </div>
     </section>
@@ -1399,6 +1429,26 @@ function overview(options = {}) {
     render();
   });
   bindStudentButtons();
+  bindTableHeaderSync();
+}
+
+function bindTableHeaderSync() {
+  const header = app.querySelector(".table-head-scroll");
+  const body = app.querySelector(".table-scroll");
+  if (!header || !body) return;
+  body.addEventListener("scroll", () => {
+    header.scrollLeft = body.scrollLeft;
+  });
+  header.addEventListener(
+    "wheel",
+    (event) => {
+      if (Math.abs(event.deltaX) <= Math.abs(event.deltaY)) return;
+      body.scrollLeft += event.deltaX;
+      header.scrollLeft = body.scrollLeft;
+      event.preventDefault();
+    },
+    { passive: false },
+  );
 }
 
 function matchesSearch(student) {
