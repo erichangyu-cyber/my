@@ -1367,7 +1367,8 @@ function overview(options = {}) {
     <section class="hero">
       <div class="summary-panel">
         <h2>全班 ${students.length} 名学生，8 次成绩动态统计</h2>
-        <p>默认按学号排列。积分按单次成绩自动计算：95 分及以上 3 分，90-94.5 分 2 分，85-89.5 分 1 分。每个成绩下方显示相对当次中位数的差值，红色为高于中位数，绿色为低于中位数。</p>
+        <p>1.积分按单次成绩自动计算：95 分及以上 3 分，90-94.5 分 2 分，85-89.5 分 1 分。
+           2.每个成绩下方显示相对当次中位数的差值，红色为高于中位数，绿色为低于中位数。</p>
         <div class="metric-grid">
           <div class="metric"><span>班级平均分</span><strong>${compactNumber(classAverage)}</strong></div>
           <div class="metric"><span>最高积分</span><strong>${Math.max(...students.map((student) => student.totalPoints))}</strong></div>
