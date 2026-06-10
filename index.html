@@ -786,6 +786,15 @@ tbody tr:hover {
   stroke-dasharray: 5 5;
 }
 
+.max-line {
+  fill: none;
+  stroke: var(--pink);
+  stroke-width: 2.4;
+  stroke-dasharray: 8 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .chart-dot {
   fill: #fff;
   stroke: var(--blue);
@@ -930,6 +939,10 @@ tbody tr:hover {
 
 .legend .median i {
   background: repeating-linear-gradient(90deg, #9aa5b5 0 6px, transparent 6px 10px);
+}
+
+.legend .max i {
+  background: repeating-linear-gradient(90deg, var(--pink) 0 7px, transparent 7px 12px);
 }
 
 .empty-state {
@@ -1197,6 +1210,10 @@ function pointFor(score) {
 
 function getStats() {
   const medians = tests.map((_, index) => median(rawStudents.map((student) => student.scores[index])));
+  const maxScores = tests.map((_, index) => {
+    const scores = rawStudents.map((student) => student.scores[index]).filter((score) => typeof score === "number" && Number.isFinite(score));
+    return scores.length ? Math.max(...scores) : null;
+  });
   const students = rawStudents.map((student) => {
     const validScores = student.scores.filter((score) => typeof score === "number");
     const totalPoints = student.scores.reduce((sum, score) => sum + pointFor(score), 0);
@@ -1204,7 +1221,7 @@ function getStats() {
     const diffs = student.scores.map((score, index) => (typeof score === "number" ? score - medians[index] : null));
     return { ...student, totalPoints, average, diffs };
   });
-  return { medians, students: sortStudents(students) };
+  return { medians, maxScores, students: sortStudents(students) };
 }
 
 function sortStudents(students) {
@@ -1367,8 +1384,7 @@ function overview(options = {}) {
     <section class="hero">
       <div class="summary-panel">
         <h2>全班 ${students.length} 名学生，8 次成绩动态统计</h2>
-        <p>1.积分按单次成绩自动计算：95分及以上 3分，90-94.5分 2分，85-89.5分 1分。</p>
-        <p>2.每个成绩下方显示相对当次中位数的差值，红色为高于中位数，绿色为低于中位数。</p>
+        <p>默认按学号排列。积分按单次成绩自动计算：95 分及以上 3 分，90-94.5 分 2 分，85-89.5 分 1 分。每个成绩下方显示相对当次中位数的差值，红色为高于中位数，绿色为低于中位数。</p>
         <div class="metric-grid">
           <div class="metric"><span>班级平均分</span><strong>${compactNumber(classAverage)}</strong></div>
           <div class="metric"><span>最高积分</span><strong>${Math.max(...students.map((student) => student.totalPoints))}</strong></div>
@@ -1490,7 +1506,7 @@ function bindStudentButtons() {
 }
 
 function renderStudent(name, options = {}) {
-  const { medians, students } = getStats();
+  const { medians, maxScores, students } = getStats();
   const student = students.find((item) => item.name === name);
   if (!student) {
     overview();
@@ -1527,12 +1543,13 @@ function renderStudent(name, options = {}) {
     <section class="detail-layout">
       <div class="detail-panel chart-panel">
         <div class="chart-wrap">
-          ${trendChart(student, medians)}
+          ${trendChart(student, medians, maxScores)}
           <div class="chart-tooltip" aria-hidden="true"></div>
         </div>
         <div class="legend">
           <span><i></i>个人成绩</span>
           <span class="median"><i></i>班级中位数</span>
+          <span class="max"><i></i>班级最高分</span>
           <span>红色差值为高于中位数，绿色为低于中位数</span>
         </div>
       </div>
@@ -1544,7 +1561,7 @@ function renderStudent(name, options = {}) {
               <div class="score-card">
                 <div>
                   <strong>${escapeHtml(tests[index])}</strong>
-                  <small>中位数 ${compactNumber(medians[index])} · ${scoreBand(score)}</small>
+                  <small>中位数 ${compactNumber(medians[index])} · 最高分 ${compactNumber(maxScores[index])} · ${scoreBand(score)}</small>
                 </div>
                 <div>
                   <div class="score-value">${compactNumber(score)}</div>
@@ -1565,11 +1582,11 @@ function renderStudent(name, options = {}) {
   bindChartTooltip();
 }
 
-function trendChart(student, medians) {
+function trendChart(student, medians, maxScores) {
   const width = 860;
   const height = 340;
   const pad = { top: 24, right: 76, bottom: 62, left: 42 };
-  const allValues = [...student.scores, ...medians].filter((value) => typeof value === "number");
+  const allValues = [...student.scores, ...medians, ...maxScores].filter((value) => typeof value === "number");
   const min = Math.max(60, Math.floor(Math.min(...allValues) / 5) * 5 - 5);
   const max = 100;
   const x = (index) => pad.left + (index / (tests.length - 1 || 1)) * (width - pad.left - pad.right);
@@ -1611,6 +1628,7 @@ function trendChart(student, medians) {
           data-test="${escapeHtml(tests[index])}"
           data-score="${compactNumber(score)}"
           data-median="${compactNumber(medians[index])}"
+          data-max="${compactNumber(maxScores[index])}"
           data-diff="${formatDiff(diff)}" />
       `;
     })
@@ -1624,6 +1642,7 @@ function trendChart(student, medians) {
     <svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(student.name)}成绩动态图">
       <rect x="0" y="0" width="${width}" height="${height}" rx="8" fill="#ffffff" />
       ${grid}
+      <path class="max-line" d="${lineFor(maxScores)}" />
       <path class="median-line" d="${lineFor(medians)}" />
       <path class="chart-line" d="${lineFor(student.scores)}" />
       ${dots}
@@ -1645,6 +1664,7 @@ function bindChartTooltip() {
         <strong>${escapeHtml(area.dataset.test)}</strong>
         <span>成绩 ${escapeHtml(area.dataset.score)}</span>
         <span>中位数 ${escapeHtml(area.dataset.median)}</span>
+        <span>最高分 ${escapeHtml(area.dataset.max)}</span>
         <span>差值 ${escapeHtml(area.dataset.diff)}</span>
       `;
       tooltip.style.left = `${Math.min(Math.max(event.clientX - rect.left + 12, 8), rect.width - tooltip.offsetWidth - 8)}px`;
@@ -1662,14 +1682,14 @@ function bindChartTooltip() {
 }
 
 async function shareStudentImage(studentName) {
-  const { medians, students } = getStats();
+  const { medians, maxScores, students } = getStats();
   const student = students.find((item) => item.name === studentName);
   if (!student) return;
   const shareButton = app.querySelector('[data-action="share"]');
   if (shareButton) shareButton.disabled = true;
   showToast("正在生成分享图片...");
   try {
-    const blob = await createStudentShareBlob(student, medians, students);
+    const blob = await createStudentShareBlob(student, medians, maxScores, students);
     if (navigator.clipboard && window.ClipboardItem) {
       await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
       showToast("分享图片已复制；也可以用“复制个人链接”单独分享页面。");
@@ -1679,7 +1699,7 @@ async function shareStudentImage(studentName) {
     }
   } catch (error) {
     try {
-      const blob = await createStudentShareBlob(student, medians, students);
+      const blob = await createStudentShareBlob(student, medians, maxScores, students);
       downloadBlob(blob, `${student.name}成绩分享.png`);
       showToast("浏览器限制了自动复制，已改为下载分享图。");
     } catch (downloadError) {
@@ -1711,9 +1731,9 @@ function showToast(message) {
   }, 2600);
 }
 
-function createStudentShareBlob(student, medians, students) {
+function createStudentShareBlob(student, medians, maxScores, students) {
   const validScores = student.scores
-    .map((score, index) => ({ score, test: tests[index], diff: student.diffs[index], median: medians[index] }))
+    .map((score, index) => ({ score, test: tests[index], diff: student.diffs[index], median: medians[index], maxScore: maxScores[index] }))
     .filter((item) => typeof item.score === "number" && Number.isFinite(item.score));
   const bestScore = validScores.reduce((best, item) => (item.score > best.score ? item : best), validScores[0] || { score: null, test: "-" });
   const positiveDiffs = student.diffs.filter((diff) => typeof diff === "number" && diff > 0).length;
@@ -1736,7 +1756,7 @@ function createStudentShareBlob(student, medians, students) {
     ["最佳表现次数", `${topQuartilePerformance.count}次`],
   ]);
   drawSharePerformanceNote(ctx, topQuartilePerformance.count, validScores.length, 70, 376, 940);
-  drawShareChart(ctx, student, medians, 70, 420, 940, 360);
+  drawShareChart(ctx, student, medians, maxScores, 70, 420, 940, 360);
   drawShareScores(ctx, validScores, 70, 855, 940);
   drawShareFooter(ctx, width, height);
 
@@ -1816,7 +1836,7 @@ function drawSharePerformanceNote(ctx, count, total, left, top, width) {
   ctx.fillText(`最佳表现次数 ${count}次：每次考试进入班级前25%计为1次，用来衡量不同难度考试中的相对表现。`, left + 18, top + 18);
 }
 
-function drawShareChart(ctx, student, medians, left, top, width, height) {
+function drawShareChart(ctx, student, medians, maxScores, left, top, width, height) {
   roundRect(ctx, left, top, width, height, 22);
   ctx.fillStyle = "#ffffff";
   ctx.fill();
@@ -1824,7 +1844,7 @@ function drawShareChart(ctx, student, medians, left, top, width, height) {
   ctx.stroke();
 
   const pad = { left: 54, right: 64, top: 42, bottom: 74 };
-  const values = [...student.scores, ...medians].filter((value) => typeof value === "number" && Number.isFinite(value));
+  const values = [...student.scores, ...medians, ...maxScores].filter((value) => typeof value === "number" && Number.isFinite(value));
   const min = Math.max(60, Math.floor(Math.min(...values) / 5) * 5 - 5);
   const max = 100;
   const plotLeft = left + pad.left;
@@ -1840,7 +1860,7 @@ function drawShareChart(ctx, student, medians, left, top, width, height) {
   ctx.fillText("成绩动态图", titleX, top + 35);
   ctx.font = font(600, 17);
   ctx.fillStyle = "#667085";
-  ctx.fillText("蓝线为个人成绩，灰线为班级中位数", titleX + 128, top + 35);
+  ctx.fillText("蓝线为个人成绩，灰线为班级中位数，粉线为班级最高分", titleX + 128, top + 35);
 
   [60, 70, 80, 90, 100].filter((tick) => tick >= min).forEach((tick) => {
     ctx.strokeStyle = "#edf1f6";
@@ -1854,6 +1874,7 @@ function drawShareChart(ctx, student, medians, left, top, width, height) {
     ctx.fillText(String(tick), left + 18, y(tick) + 5);
   });
 
+  drawLine(ctx, maxScores, x, y, "#ff4fa3", 3.5, [14, 8]);
   drawLine(ctx, medians, x, y, "#93a1b5", 3, [10, 10]);
   drawLine(ctx, student.scores, x, y, "#3772ff", 6);
   student.scores.forEach((score, index) => {
@@ -1898,7 +1919,7 @@ function drawShareScores(ctx, validScores, left, top, width) {
     ctx.fillText(truncateText(ctx, item.test, 210), x + 20, y + 34);
     ctx.fillStyle = "#667085";
     ctx.font = font(650, 18);
-    ctx.fillText(`中位数 ${compactNumber(item.median)}`, x + 20, y + 64);
+    ctx.fillText(`中位数 ${compactNumber(item.median)} · 最高分 ${compactNumber(item.maxScore)}`, x + 20, y + 64);
     ctx.textAlign = "right";
     ctx.fillStyle = "#111827";
     ctx.font = font(900, 30);
