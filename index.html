@@ -84,7 +84,7 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  width: min(1180px, calc(100% - 36px));
+  width: min(1360px, calc(100% - 36px));
   margin: 0 auto;
   padding: 15px 0;
 }
@@ -180,7 +180,7 @@ button {
 }
 
 .page {
-  width: min(1180px, calc(100% - 36px));
+  width: min(1360px, calc(100% - 36px));
   margin: 0 auto;
   padding: 30px 0 48px;
 }
@@ -362,42 +362,43 @@ button {
   overflow: hidden;
 }
 
-.scroll-hint {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  z-index: 8;
-  border: 1px solid rgba(215, 222, 233, 0.82);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: var(--shadow-soft);
-  color: var(--muted);
-  padding: 5px 10px;
-  font-size: 12px;
-  font-weight: 750;
-  pointer-events: none;
-}
-
 .table-scroll {
   overflow: auto;
   position: relative;
   max-width: 100%;
   overscroll-behavior-x: contain;
-  padding-top: 0;
+  padding-bottom: 10px;
+  scrollbar-color: rgba(55, 114, 255, 0.52) rgba(234, 242, 255, 0.95);
+  scrollbar-width: thin;
+}
+
+.table-scroll::-webkit-scrollbar {
+  height: 14px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgba(234, 242, 255, 0.95);
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  border: 3px solid rgba(234, 242, 255, 0.95);
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--blue), var(--pink));
 }
 
 table {
   width: max-content;
   border-collapse: separate;
   border-spacing: 0;
-  min-width: 1120px;
+  min-width: 1080px;
   table-layout: fixed;
 }
 
 th,
 td {
   border-bottom: 1px solid var(--line);
-  padding: 13px 12px;
+  padding: 12px 10px;
   text-align: right;
   white-space: nowrap;
   font-size: 13.5px;
@@ -413,14 +414,14 @@ th {
   vertical-align: top;
 }
 
-th:nth-child(-n + 5),
-td:nth-child(-n + 5) {
+th:nth-child(-n + 3),
+td:nth-child(-n + 3) {
   position: sticky;
   z-index: 2;
   background: #fff;
 }
 
-th:nth-child(-n + 5) {
+th:nth-child(-n + 3) {
   z-index: 5;
   background: #f8fbff;
 }
@@ -428,59 +429,57 @@ th:nth-child(-n + 5) {
 th:nth-child(1),
 td:nth-child(1) {
   left: 0;
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+}
+
+th:nth-child(2),
+td:nth-child(2) {
+  left: 44px;
   width: 52px;
   min-width: 52px;
   max-width: 52px;
 }
 
-th:nth-child(2),
-td:nth-child(2) {
-  left: 52px;
-  width: 64px;
-  min-width: 64px;
-  max-width: 64px;
-}
-
 th:nth-child(3),
 td:nth-child(3) {
-  left: 116px;
-  width: 112px;
-  min-width: 112px;
-  max-width: 112px;
+  left: 96px;
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  box-shadow: 12px 0 18px -18px rgba(25, 36, 64, 0.46);
 }
 
 th:nth-child(4),
 td:nth-child(4) {
-  left: 228px;
-  width: 78px;
-  min-width: 78px;
-  max-width: 78px;
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
 }
 
 th:nth-child(5),
 td:nth-child(5) {
-  left: 306px;
-  width: 78px;
-  min-width: 78px;
-  max-width: 78px;
-  box-shadow: 12px 0 18px -18px rgba(25, 36, 64, 0.46);
+  width: 70px;
+  min-width: 70px;
+  max-width: 70px;
 }
 
-tbody tr:hover td:nth-child(-n + 5) {
+tbody tr:hover td:nth-child(-n + 3) {
   background: #f9fcff;
 }
 
 .exam-head {
-  width: 126px;
-  min-width: 126px;
-  max-width: 126px;
+  width: 116px;
+  min-width: 116px;
+  max-width: 116px;
 }
 
 th:nth-child(n + 6),
 td:nth-child(n + 6) {
-  width: 126px;
-  min-width: 126px;
-  max-width: 126px;
+  width: 116px;
+  min-width: 116px;
+  max-width: 116px;
 }
 
 .exam-name,
@@ -718,7 +717,7 @@ tbody tr:hover {
 
 .detail-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.18fr) minmax(310px, 0.82fr);
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.44fr);
   gap: 18px;
 }
 
@@ -822,14 +821,34 @@ tbody tr:hover {
 .score-list {
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: 1fr;
+  max-height: 340px;
+  overflow: auto;
+  padding-right: 4px;
+  scrollbar-color: rgba(55, 114, 255, 0.45) rgba(234, 242, 255, 0.9);
+  scrollbar-width: thin;
+}
+
+.score-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.score-list::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgba(234, 242, 255, 0.9);
+}
+
+.score-list::-webkit-scrollbar-thumb {
+  border: 2px solid rgba(234, 242, 255, 0.9);
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--blue), var(--pink));
 }
 
 .score-card {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 8px;
-  align-items: start;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: linear-gradient(180deg, #fff, var(--surface-soft));
@@ -862,6 +881,7 @@ tbody tr:hover {
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  min-width: 96px;
 }
 
 .legend {
@@ -923,7 +943,7 @@ tbody tr:hover {
 @media (max-width: 860px) {
   .topbar-inner,
   .page {
-    width: min(100% - 24px, 1180px);
+    width: min(100% - 24px, 1360px);
   }
 
   .topbar-inner,
@@ -991,10 +1011,6 @@ tbody tr:hover {
 
   .detail-panel {
     padding: 16px;
-  }
-
-  .score-list {
-    grid-template-columns: 1fr;
   }
 
   .exam-head {
@@ -1217,6 +1233,7 @@ function scoreBand(score) {
 }
 
 function renderShell(content, options = {}) {
+  const compactNav = options.compactNav;
   app.innerHTML = `
     <div class="app-shell">
       <header class="topbar">
@@ -1228,13 +1245,17 @@ function renderShell(content, options = {}) {
               <p>积分、排名、中位数对比与个人趋势</p>
             </div>
           </div>
-          <div class="nav-actions">
-            <input class="search" placeholder="搜索姓名/全拼/首字母" value="${escapeHtml(searchTerm)}" />
-            <button class="ghost-button" type="button" data-action="import">导入XLSX</button>
-            <button class="ghost-button" type="button" data-action="export">导出XLSX</button>
-            <button class="ghost-button" type="button" data-action="home">总览</button>
-            <input class="file-input" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
-          </div>
+          ${
+            compactNav
+              ? ""
+              : `<div class="nav-actions">
+                  <input class="search" placeholder="搜索姓名/全拼/首字母" value="${escapeHtml(searchTerm)}" />
+                  <button class="ghost-button" type="button" data-action="import">导入XLSX</button>
+                  <button class="ghost-button" type="button" data-action="export">导出XLSX</button>
+                  <button class="ghost-button" type="button" data-action="home">总览</button>
+                  <input class="file-input" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+                </div>`
+          }
         </div>
       </header>
       <main class="page">${content}</main>
@@ -1242,20 +1263,23 @@ function renderShell(content, options = {}) {
     </div>
   `;
   const search = app.querySelector(".search");
-  search.addEventListener("input", (event) => {
-    updateSearch(event.target.value);
-  });
+  if (search) {
+    search.addEventListener("input", (event) => {
+      updateSearch(event.target.value);
+    });
+  }
   if (options.focusSearch) {
     requestAnimationFrame(() => {
       const nextSearch = app.querySelector(".search");
+      if (!nextSearch) return;
       nextSearch.focus();
       nextSearch.setSelectionRange(nextSearch.value.length, nextSearch.value.length);
     });
   }
-  app.querySelector('[data-action="home"]').addEventListener("click", () => setStudent(null));
-  app.querySelector('[data-action="export"]').addEventListener("click", exportExcel);
-  app.querySelector('[data-action="import"]').addEventListener("click", () => app.querySelector(".file-input").click());
-  app.querySelector(".file-input").addEventListener("change", importExcel);
+  app.querySelector('[data-action="home"]')?.addEventListener("click", () => setStudent(null));
+  app.querySelector('[data-action="export"]')?.addEventListener("click", exportExcel);
+  app.querySelector('[data-action="import"]')?.addEventListener("click", () => app.querySelector(".file-input").click());
+  app.querySelector(".file-input")?.addEventListener("change", importExcel);
 }
 
 function updateSearch(value) {
@@ -1353,9 +1377,8 @@ function overview(options = {}) {
       </div>
     </section>
     <section class="table-panel">
-      <div class="scroll-hint">左右滑动查看全部考试成绩</div>
       <div class="table-scroll">
-        <table style="min-width: ${384 + tests.length * 126}px">
+        <table style="min-width: ${336 + tests.length * 116}px">
           <thead>
             <tr>
               <th>序号</th>
@@ -1432,11 +1455,12 @@ function renderStudent(name, options = {}) {
   renderShell(`
     <section class="detail-header">
       <div class="detail-title">
-        <h2>${student.id}号 ${escapeHtml(student.name)}的成绩趋势</h2>
+        <h2>${student.id}号 ${escapeHtml(student.name)}的成绩动态</h2>
         <p>总积分 ${student.totalPoints} 分，平均分 ${compactNumber(student.average)}；最佳表现次数按每次考试进入班级前25%统计。</p>
       </div>
       <div class="detail-actions">
         <button class="back-button share-button" type="button" data-action="share">生成分享图</button>
+        <button class="back-button" type="button" data-action="copy-link">复制个人链接</button>
         <button class="back-button" type="button" data-action="back">← 返回总览</button>
       </div>
     </section>
@@ -1482,17 +1506,18 @@ function renderStudent(name, options = {}) {
         </div>
       </aside>
     </section>
-  `, options);
+  `, { ...options, compactNav: true });
 
   app.querySelector('[data-action="back"]').addEventListener("click", () => setStudent(null));
   app.querySelector('[data-action="share"]').addEventListener("click", () => shareStudentImage(student.name));
+  app.querySelector('[data-action="copy-link"]').addEventListener("click", () => copyStudentLink(student.name));
   bindChartTooltip();
 }
 
 function trendChart(student, medians) {
   const width = 860;
   const height = 340;
-  const pad = { top: 24, right: 28, bottom: 62, left: 42 };
+  const pad = { top: 24, right: 76, bottom: 62, left: 42 };
   const allValues = [...student.scores, ...medians].filter((value) => typeof value === "number");
   const min = Math.max(60, Math.floor(Math.min(...allValues) / 5) * 5 - 5);
   const max = 100;
@@ -1545,7 +1570,7 @@ function trendChart(student, medians) {
     .join("");
 
   return `
-    <svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(student.name)}成绩趋势图">
+    <svg class="chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${escapeHtml(student.name)}成绩动态图">
       <rect x="0" y="0" width="${width}" height="${height}" rx="8" fill="#ffffff" />
       ${grid}
       <path class="median-line" d="${lineFor(medians)}" />
@@ -1596,7 +1621,7 @@ async function shareStudentImage(studentName) {
     const blob = await createStudentShareBlob(student, medians, students);
     if (navigator.clipboard && window.ClipboardItem) {
       await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-      showToast("分享图片已复制，可以直接粘贴发送。");
+      showToast("分享图片已复制；也可以用“复制个人链接”单独分享页面。");
     } else {
       downloadBlob(blob, `${student.name}成绩分享.png`);
       showToast("当前浏览器不支持自动复制图片，已为你下载分享图。");
@@ -1611,6 +1636,16 @@ async function shareStudentImage(studentName) {
     }
   } finally {
     if (shareButton) shareButton.disabled = false;
+  }
+}
+
+async function copyStudentLink(studentName) {
+  const url = `${location.origin}${location.pathname}#student=${encodeURIComponent(studentName)}`;
+  try {
+    await navigator.clipboard.writeText(url);
+    showToast("个人页面链接已复制，可以直接粘贴发送。");
+  } catch (error) {
+    showToast("当前浏览器限制自动复制，请在地址栏复制这个学生页面链接。");
   }
 }
 
@@ -1646,11 +1681,12 @@ function createStudentShareBlob(student, medians, students) {
     ["总积分", student.totalPoints],
     ["总均分", compactNumber(student.average)],
     ["最高分", compactNumber(bestScore.score)],
-    ["高于中位数", `${positiveDiffs}/${validScores.length}`],
-    ["最佳表现", `${topQuartilePerformance.count}/${validScores.length}`],
+    ["高于中位数", `${positiveDiffs}次`],
+    ["最佳表现次数", `${topQuartilePerformance.count}次`],
   ]);
-  drawShareChart(ctx, student, medians, 70, 390, 940, 360);
-  drawShareScores(ctx, validScores, 70, 825, 940);
+  drawSharePerformanceNote(ctx, topQuartilePerformance.count, validScores.length, 70, 376, 940);
+  drawShareChart(ctx, student, medians, 70, 420, 940, 360);
+  drawShareScores(ctx, validScores, 70, 855, 940);
   drawShareFooter(ctx, width, height);
 
   return new Promise((resolve, reject) => {
@@ -1694,15 +1730,7 @@ function drawShareHeader(ctx, student, width) {
   ctx.fillText(`${student.id}号 ${student.name}`, 76, 160);
   ctx.fillStyle = "#667085";
   ctx.font = font(650, 25);
-  ctx.fillText("个人成绩趋势分享卡", 78, 210);
-  ctx.textAlign = "right";
-  ctx.fillStyle = "#3772ff";
-  ctx.font = font(850, 24);
-  ctx.fillText("全班成绩总览", width - 78, 160);
-  ctx.fillStyle = "#667085";
-  ctx.font = font(600, 20);
-  ctx.fillText("长按或粘贴即可发送", width - 78, 200);
-  ctx.textAlign = "left";
+  ctx.fillText("个人成绩动态分享卡", 78, 210);
 }
 
 function drawShareMetrics(ctx, metrics) {
@@ -1728,6 +1756,15 @@ function drawShareMetrics(ctx, metrics) {
   });
 }
 
+function drawSharePerformanceNote(ctx, count, total, left, top, width) {
+  roundRect(ctx, left, top, width, 26, 13);
+  ctx.fillStyle = "rgba(234, 242, 255, 0.78)";
+  ctx.fill();
+  ctx.fillStyle = "#536074";
+  ctx.font = font(650, 17);
+  ctx.fillText(`最佳表现次数 ${count}次：每次考试进入班级前25%计为1次，用来衡量不同难度考试中的相对表现。`, left + 18, top + 18);
+}
+
 function drawShareChart(ctx, student, medians, left, top, width, height) {
   roundRect(ctx, left, top, width, height, 22);
   ctx.fillStyle = "#ffffff";
@@ -1735,7 +1772,7 @@ function drawShareChart(ctx, student, medians, left, top, width, height) {
   ctx.strokeStyle = "#e3e8f0";
   ctx.stroke();
 
-  const pad = { left: 54, right: 28, top: 42, bottom: 74 };
+  const pad = { left: 54, right: 64, top: 42, bottom: 74 };
   const values = [...student.scores, ...medians].filter((value) => typeof value === "number" && Number.isFinite(value));
   const min = Math.max(60, Math.floor(Math.min(...values) / 5) * 5 - 5);
   const max = 100;
@@ -1745,13 +1782,14 @@ function drawShareChart(ctx, student, medians, left, top, width, height) {
   const plotBottom = top + height - pad.bottom;
   const x = (index) => plotLeft + (index / (tests.length - 1 || 1)) * (plotRight - plotLeft);
   const y = (value) => plotTop + ((max - value) / (max - min)) * (plotBottom - plotTop);
+  const titleX = left + 52;
 
   ctx.fillStyle = "#111827";
-  ctx.font = font(850, 28);
-  ctx.fillText("成绩趋势", left + 28, top + 36);
-  ctx.font = font(650, 18);
+  ctx.font = font(800, 24);
+  ctx.fillText("成绩动态图", titleX, top + 35);
+  ctx.font = font(600, 17);
   ctx.fillStyle = "#667085";
-  ctx.fillText("蓝线为个人成绩，灰线为班级中位数", left + 155, top + 35);
+  ctx.fillText("蓝线为个人成绩，灰线为班级中位数", titleX + 128, top + 35);
 
   [60, 70, 80, 90, 100].filter((tick) => tick >= min).forEach((tick) => {
     ctx.strokeStyle = "#edf1f6";
